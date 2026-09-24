@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api._errors import (
     CouldNotRetrieveTranscript,
@@ -8,6 +9,18 @@ from youtube_transcript_api._errors import (
 )
 
 app = Flask(__name__)
+
+# Zezwól na zapytania CORS tylko z domeny mardraze.pl (http i https, z i bez www)
+CORS(app, resources={
+    r"/api/*": {
+        "origins": [
+            "https://mardraze.pl",
+            "https://www.mardraze.pl",
+            "http://mardraze.pl",
+            "http://www.mardraze.pl",
+        ]
+    }
+})
 
 
 @app.get("/api/transcript")
